@@ -10,8 +10,9 @@ export const hashPassword = async (password) => {
 };
 
 export const createJWT = (user) => {
+  console.log(JSON.stringify(user, null, 2));
   const token = jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, type: user.type },
     process.env.JWT_SECRET
   );
   return token;
@@ -33,10 +34,10 @@ export const verifyJWT = (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = payload;
-    console.log(payload);
+    console.log(`USER: ${JSON.stringify(req.user, null, 2)}`);
     next();
   } catch (e) {
-    res.status(401).send("Invalid JWT Token");
+    res.status(401).send("Invalid JWT Token.");
     return;
   }
 };

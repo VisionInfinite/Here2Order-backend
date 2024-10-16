@@ -13,20 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum USER_TYPE {
+  ADMIN
+  USER
+  OWNER
+}
+
 model User {
-  id       String @id @default(uuid())
-  username String
-  email    String @unique
-  password String
-  number   String @unique
+  id         String       @id @default(uuid())
+  username   String
+  email      String       @unique
+  password   String
+  number     String       @unique
+  type       USER_TYPE    @default(USER)
+  restaurant Restaurant[]
 }
 
 model Restaurant {
   id      String    @id @default(uuid())
-  owner   String
+  ownerId String
+  owner   User      @relation(fields: [ownerId], references: [id])
   name    String    @unique @db.VarChar(255)
   tables  String
   address String
+  phone   String
   items   Items[]
   Timings Timings[]
 }
@@ -34,7 +44,7 @@ model Restaurant {
 model Items {
   id           String     @id @default(uuid())
   name         String
-  catagory     String
+  category     String
   description  String
   image        String
   price        Float
