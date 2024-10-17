@@ -12,7 +12,7 @@ export const handleInputErrors = (req, res, next) => {
   }
 };
 
-export const checkIfUser = async (req, res, next) => {
+export const checkIfUserExist = async (req, res, next) => {
   const user = await prisma.user.findFirst({
     where: {
       OR: [{ email: req.body.email }, { number: req.body.number }],
@@ -26,15 +26,15 @@ export const checkIfUser = async (req, res, next) => {
   next();
 };
 
-export const checkUserType = (req, res, next) => {
-  if (!req.user || req.user.type === "USER") {
+export const checkIfTypeOwner = (req, res, next) => {
+  if (req.user.type === "USER") {
     res.status(401).send("USER TYPE Unauthorized");
     return;
   }
   next();
 };
 
-export const checkIfOwner = async (req, res, next) => {
+export const checkIfOwnerById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const data = await prisma.restaurant.findUnique({

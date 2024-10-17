@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import {
-  checkUserType,
-  checkIfOwner,
+  checkIfTypeOwner,
+  checkIfOwnerById,
   handleInputErrors,
 } from "../modules/middleware";
 import { getRestaurants, createRestaurant } from "../handlers/restaurant";
@@ -25,7 +25,7 @@ route.post(
   body("address").isString(),
   body("phone").isString(),
   handleInputErrors,
-  checkUserType,
+  checkIfTypeOwner,
   createRestaurant
 );
 
@@ -38,7 +38,7 @@ route.put(
   body("image").isString(),
   body("price").isFloat(),
   handleInputErrors,
-  checkUserType,
-  checkIfOwner,
+  checkIfTypeOwner,
+  checkIfOwnerById,
   insertItemById
 );

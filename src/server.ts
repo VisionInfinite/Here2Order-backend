@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { body } from "express-validator";
 import { login, signup } from "./handlers/user";
 import { verifyJWT } from "./modules/auth";
-import { handleInputErrors, checkIfUser } from "./modules/middleware";
+import { handleInputErrors, checkIfUserExist } from "./modules/middleware";
 import { route } from "./routes/main";
 
 dotenv.config();
@@ -23,7 +23,7 @@ app.post(
   body("email").isEmail(),
   body("number").isString(),
   handleInputErrors,
-  checkIfUser,
+  checkIfUserExist,
   signup
 );
 
