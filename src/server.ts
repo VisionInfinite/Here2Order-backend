@@ -4,7 +4,7 @@ import { body } from "express-validator";
 import { login, signup } from "./handlers/user";
 import { verifyJWT } from "./modules/auth";
 import { handleInputErrors, checkIfUser } from "./modules/middleware";
-import { restaurant } from "./routes/restaurant";
+import { route } from "./routes/main";
 
 dotenv.config();
 const app = express();
@@ -35,7 +35,7 @@ app.post(
   login
 );
 
-app.use("/restaurant", verifyJWT, restaurant);
+app.use("/api", verifyJWT, route);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(
