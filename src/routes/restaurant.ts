@@ -77,19 +77,6 @@ restaurant.post("/", checkUserType, async (req, res) => {
   }
 });
 
-/**
- * model Items {
-  id           String     @id @default(uuid())
-  name         String
-  catagory     String
-  description  String
-  image        String
-  price        Float
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  restaurantId String
-}
- */
-
 restaurant.put(":/id", checkUserType, checkIfOwner, async (req, res) => {
   const { id } = req.params;
   const { name, category, description, image, price } = req.body;
@@ -104,6 +91,8 @@ restaurant.put(":/id", checkUserType, checkIfOwner, async (req, res) => {
         restaurantId: id,
       },
     });
+
+    res.status(201).json({ data: item });
   } catch (error) {
     console.error(error);
     res
