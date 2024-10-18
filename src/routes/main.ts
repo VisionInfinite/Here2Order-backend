@@ -14,12 +14,12 @@ route.get("/info", (req, res) => {
   res.send("Restaurant route");
 });
 
-route.get("/", getRestaurants);
+route.get("/restaurant", getRestaurants);
 
-route.get("/:id", param("id").isUUID(), handleInputErrors, getItemsById);
+route.get("/menu/:id", param("id").isUUID(), handleInputErrors, getItemsById);
 
 route.post(
-  "/",
+  "/restaurant",
   body("name").isString(),
   body("table").isString(),
   body("address").isString(),
@@ -30,7 +30,7 @@ route.post(
 );
 
 route.put(
-  ":/id",
+  "/menu/:id",
   param("id").isUUID(),
   body("name").isString(),
   body("category").isString(),
@@ -42,3 +42,5 @@ route.put(
   checkIfOwnerById,
   insertItemById
 );
+
+route.delete("/menu/:id");

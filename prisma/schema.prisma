@@ -27,29 +27,38 @@ model User {
   number     String       @unique
   type       USER_TYPE    @default(USER)
   restaurant Restaurant[]
+  orders     Order[]
+  Feedback   Feedback[]
+  Wishlist   Wishlist[]
+  Ticket     Ticket[]
 }
 
 model Restaurant {
-  id      String    @id @default(uuid())
-  ownerId String
-  owner   User      @relation(fields: [ownerId], references: [id])
-  name    String    @unique @db.VarChar(255)
-  tables  String
-  address String
-  phone   String
-  items   Items[]
-  Timings Timings[]
+  id       String     @id @default(uuid())
+  ownerId  String
+  owner    User       @relation(fields: [ownerId], references: [id])
+  name     String     @unique @db.VarChar(255)
+  tables   String
+  address  String
+  phone    String
+  items    Items[]
+  Timings  Timings[]
+  orders   Order[]
+  Feedback Feedback[]
+  Wishlist Wishlist[]
 }
 
 model Items {
-  id           String     @id @default(uuid())
+  id           String      @id @default(uuid())
   name         String
   category     String
   description  String
   image        String
   price        Float
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
   restaurantId String
+  orders       OrderItem[]
+  Wishlist     Wishlist[]
 }
 
 model Timings {
@@ -59,4 +68,65 @@ model Timings {
   day          String
   open         String
   close        String
+}
+
+enum ORDER_STATUS {
+  PLACED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id           String       @id @default(uuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+  restaurantId String
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id])
+  items        OrderItem[]
+  status       ORDER_STATUS @default(PLACED)
+  total        Float
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model OrderItem {
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id])
+  itemId   String
+  item     Items  @relation(fields: [itemId], references: [id])
+  quantity Int
+
+  @@id([orderId, itemId])
+}
+
+model Feedback {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  rating       Int
+  comment      String
+  createdAt    DateTime   @default(now())
+}
+
+model Wishlist {
+  id           String      @id @default(uuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  itemId       String
+  item         Items       @relation(fields: [itemId], references: [id])
+  restaurantId String?
+  Restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+}
+
+model Ticket {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

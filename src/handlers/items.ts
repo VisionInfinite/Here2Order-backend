@@ -56,3 +56,27 @@ export const insertItemById = async (req, res) => {
       .json({ error: "An error occurred while creating the item." });
   }
 };
+
+/**
+ * @route DELETE /restaurant/:id
+ * @param {String} id - Item ID
+ * @returns {Object} - Deleted item
+ */
+
+export const removeItemById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.items.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the item." });
+  }
+};

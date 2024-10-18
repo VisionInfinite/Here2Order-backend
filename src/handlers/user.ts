@@ -1,6 +1,14 @@
 import { hashPassword, createJWT, comparePassword } from "../modules/auth";
 import prisma from "../modules/db";
 
+/**
+ * @route POST /restaurant
+ * @param {String} name - Restaurant name
+ * @param {String} address - Restaurant address
+ * @param {String} number - Restaurant number
+ * @returns {Object} - Restaurant details
+ */
+
 export const signup = async (req, res) => {
   try {
     const user = await prisma.user.create({
@@ -23,6 +31,13 @@ export const signup = async (req, res) => {
     res.status(400).send("Error creating user");
   }
 };
+
+/**
+ * @route POST /login
+ * @param {String} email - User email
+ * @param {String} password - User password
+ * @returns {String} - JWT token
+ */
 
 export const login = async (req, res) => {
   try {
